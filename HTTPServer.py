@@ -27,12 +27,12 @@ def main():
         (client_socket, address) = server_socket.accept()
 
         line = client_socket.recv(1024)
-        line = line.decode('ascii')
+        line = line.decode('utf-8')
 
         resp = line
         resp += handleHandleLine(line)
 
-        client_socket.send(resp.encode('ascii'))
+        client_socket.send(resp.encode('utf-8'))
 
 def handleHandleLine(line):
     currTokenIdx = 0
@@ -60,9 +60,9 @@ def handleHandleLine(line):
         resp += 'HTTP-Version = ' + request[2] + '\n'
 
         if request[1].split('.')[-1].lower() not in ['txt', 'html', 'htm']:
-            return '501 Not Implemented: ' + request[1] + '\n'
+            return resp + '501 Not Implemented: ' + request[1] + '\n'
 
-        fileName = cleanFilePath(request[1])
+        fileName = request[1][1:]
 
         try:
             path = os.getcwd() + '/' + fileName
@@ -71,7 +71,7 @@ def handleHandleLine(line):
                 resp += line
             return resp
         except FileNotFoundError:
-            return '404 Not Found: ' + request[1] + '\n'
+            return resp + '404 Not Found: ' + request[1] + '\n'
         except IOError as e:
             return 'ERROR: ' + e + '\n'
     else: return requestErrors[currTokenIdx-4]
@@ -117,4 +117,7 @@ def checkSubstring(tokenIdx, token):
     return rv
 
 if __name__ == "__main__":
-    main()
+    try: main()
+    except KeyboardInterrupt:
+        try: sys.exit(0)
+        except SystemExit: os._exit(0)
