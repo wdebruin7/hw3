@@ -15,9 +15,13 @@ def main():
     args = sys.argv
     port = int(args[1])
 
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(("", port))
-    server_socket.listen(1)
+    try:
+        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_socket.bind(("", port))
+        server_socket.listen(1)
+    except OSError as e:
+        print('Connection error')
+        return
 
     while True:
         (client_socket, address) = server_socket.accept()

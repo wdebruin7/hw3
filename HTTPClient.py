@@ -3,17 +3,21 @@ import sys
 
 args = sys.argv
 
-host = socket.gethostname()
+host = 'comp431sp19.cs.unc.edu'
 port = int(args[1])
-
 
 for line in sys.stdin:
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((host,port))
-    s.sendall(line.encode('ascii'))
+    try:
+        print('attempting to connect...')
 
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((host,port))
+        print('connected!')
 
-    msg = s.recv(1024)
-    s.close()
-    print ("Recieved: "+ msg.decode('ascii'), end='')
+        s.sendall(line.encode('ascii'))
+        msg = s.recv(1024)
+        s.close()
+        print ("Recieved: "+ msg.decode('ascii'), end='')
+    except OSError as e:
+        print('Connection error')
