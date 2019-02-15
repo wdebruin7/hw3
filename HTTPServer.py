@@ -25,7 +25,7 @@ def main():
 
     while True:
         (client_socket, address) = server_socket.accept()
-        #print("Connection established with {}".format(str(address)))
+        print("Connection established with {}".format(str(address)))
 
         line = client_socket.recv(1024)
         line = line.decode('ascii')
@@ -64,8 +64,8 @@ def handleHandleLine(line):
             return '501 Not Implemented: ' + request[1] + '\n'
 
         try:
-            path = (os.getcwd() + request[1]).lower()
-            file = open(request[1][1:], 'r')
+            path = os.getcwd() + request[1]
+            file = open(request[1][1:].lower(), 'r')
             for line in file:
                 resp += line
             return resp
