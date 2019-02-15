@@ -9,12 +9,8 @@ port = int(args[1])
 for line in sys.stdin:
 
     try:
-        print('attempting to connect...')
-
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((host,port))
-        print('connected!')
-
         s.sendall(line.encode('ascii'))
         msg = s.recv(1024)
         s.close()
