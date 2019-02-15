@@ -3,7 +3,10 @@ import sys
 
 args = sys.argv
 
-host = 'comp431sp19.cs.unc.edu'
+if (len(args) >= 3) and (args[2] == '-l'):
+    host = socket.gethostname()
+else:
+    host = 'comp431sp19.cs.unc.edu'
 port = int(args[1])
 
 for line in sys.stdin:

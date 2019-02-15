@@ -25,7 +25,6 @@ def main():
 
     while True:
         (client_socket, address) = server_socket.accept()
-        print("Connection established with {}".format(str(address)))
 
         line = client_socket.recv(1024)
         line = line.decode('ascii')
@@ -63,9 +62,11 @@ def handleHandleLine(line):
         if request[1].split('.')[-1].lower() not in ['txt', 'html', 'htm']:
             return '501 Not Implemented: ' + request[1] + '\n'
 
+        fileName = cleanFilePath(request[1])
+
         try:
-            path = os.getcwd() + request[1]
-            file = open(request[1][1:].lower(), 'r')
+            path = os.getcwd() + '/' + fileName
+            file = open(fileName, 'r')
             for line in file:
                 resp += line
             return resp
@@ -74,6 +75,15 @@ def handleHandleLine(line):
         except IOError as e:
             return 'ERROR: ' + e + '\n'
     else: return requestErrors[currTokenIdx-4]
+
+def cleanFilePath(token):
+    if token[0]=='/': token = token[1:]
+    arr = token.split('.')
+    arr[-1] = arr[-1].lower()
+    resp = arr[0]
+    for elt in arr[1:]:
+        resp += '.' + elt
+    return resp
 
 def validFilepath(token):
     if token[0] != '/':
