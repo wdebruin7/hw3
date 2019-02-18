@@ -11,7 +11,8 @@ else:
 port = int(args[1])
 
 for line in sys.stdin:
-
+    print(line, end='')
+    
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((host,port))
