@@ -29,8 +29,7 @@ def main():
         line = client_socket.recv(1024)
         line = line.decode('utf-8')
 
-        resp = line
-        resp += handleHandleLine(line)
+        resp = handleHandleLine(line)
 
         client_socket.send(resp.encode('utf-8'))
 
